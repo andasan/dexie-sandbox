@@ -1,5 +1,5 @@
 export interface Todo {
-    id: number;
+    id?: number;
     title: string;
     memo: string;
     complete: number;

@@ -11,16 +11,16 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CheckIcon from "@mui/icons-material/Check";
 
-import { db } from "../db";
+import { db, countByFieldAndFilter, getAllRowsByField, modifyField, deleteById } from "../db";
 
 export function TodoList() {
   const todos = useLiveQuery(
-    () => db.todos.where("complete").equals(0).sortBy("id"),
+    () => getAllRowsByField("complete", 0, "id"),
     []
   );
 
-  const todoCount = useLiveQuery(() => db.todos.where("complete").equals(0).count());
-  const completedCount = useLiveQuery(() => db.todos.where("complete").equals(1).count());
+  const todoCount = useLiveQuery(() => countByFieldAndFilter("complete", 0));
+  const completedCount = useLiveQuery(() => countByFieldAndFilter("complete", 1));
 
   if (!todos || todoCount === undefined) return null;
 
@@ -50,20 +50,14 @@ export function TodoList() {
                     edge="end" 
                     aria-label="complete" 
                     sx={{ mr: 1 }}
-                    onClick={() =>
-                      db.todos
-                        .where({
-                          id: todo.id
-                        })
-                        .modify((x) => ++x.complete)
-                    }
+                    onClick={() => modifyField(todo.id, "complete")}
                   >
                     <CheckIcon />
                   </IconButton>
                   <IconButton 
                     edge="end" 
                     aria-label="delete"
-                    onClick={() => db.todos.where({id: todo.id}).delete()}
+                    onClick={() => deleteById(todo.id)}
                   >
                     <DeleteIcon />
                   </IconButton>

@@ -26,9 +26,10 @@ export function AddTodo() {
         draggable: false,
         progress: undefined,
       });
-      // add(todo);
-      // setTodo({ title: "", memo: "", complete: 0 });
+      return
     }
+    add(todo);
+    setTodo({ title: "", memo: "", complete: 0 });
   }
 
   return (
